@@ -1,0 +1,114 @@
+---
+title: "MSPSTAGE"
+author: "Christelle"
+date: '2022-06-26'
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r message=FALSE,warning=FALSE,include=FALSE}
+ library(haven) 
+library(forcats)
+ library(gtsummary)
+ library(arsenal)
+ library(finalfit)
+ library(dplyr)
+ library(labelled)
+library(ggplot2)
+library(survival)
+library(survminer, quietly = TRUE)
+library(rquery)
+```
+
+
+## lecture de la base de données
+
+```{r message=FALSE,warning=FALSE,include=FALSE}
+setwd("D:/Memoire_Christelle")
+#setwd("C:/Users/Serge M A SOMDA/OneDrive/UNB/ENCADREMENTS/2_MASTER/KIEMDE CHRISTELLE/Data/Data_Script_220817")
+
+Basee <-read_dta("widee_data_comp.dta")
+
+
+ 
+# Basee=read.csv2("donnee.csv",
+#                 header = TRUE,
+#                 stringsAsFactors=FALSE,
+#                 sep = ",")
+
+
+```
+
+
+
+```{r message=FALSE,warning=FALSE,include=FALSE}
+Basee_cont    <- Basee
+Basee$residence <- as.factor(Basee$residence)
+Basee$Sex     <- as.factor(Basee$Sex)
+Basee$OMG     <- as.factor(Basee$OMG)
+Basee$IMG     <- as.factor(Basee$IMG)
+Basee$ENT     <- as.factor(Basee$ENT)
+Basee$BTH     <- as.factor(Basee$BTH)
+Basee$DTH     <- as.factor(Basee$DTH)
+Basee$EXT     <- as.factor(Basee$EXT)
+Basee$migraAnn <- as.factor(Basee$migraAnn)
+
+```
+
+
+## statistiques descriptives
+
+
+```{r results='asis',message=FALSE,warning=FALSE}
+mycontrols  <- tableby.control(test=FALSE, total=TRUE,text = TRUE,
+                               numeric.test="kwt", cat.test="chisq",
+                               numeric.stats=c("N","Nmiss","range" ,"medianq1q3","meansd"),
+                               cat.stats=c("N","countpct","Nmiss"),
+                               stats.labels=list(N='Available data', meansd="Mean(sd)", medianq1q3='Median(IQR)',Nmiss="Missing", range="min-max"))
+tab2 <- tableby(~ Sex + migraAnn  + residence + OMG + IMG +ENT+BTH+DTH+EXT, data=Basee, control=mycontrols
+    )
+summary(tab2,title='Statistiques descriptives univariées',digits = 2,
+        digits.pct = 2,term.name="Variables",pfootnote=TRUE)
+
+```
+
+## statistiques bivariée
+
+```{r message=FALSE,warning=FALSE,echo=FALSE,results='asis'}
+
+mycontrols  <- tableby.control(test=TRUE, total=TRUE,text = TRUE,
+                               numeric.test="kwt", cat.test="chisq",
+                               numeric.stats=c("N","Nmiss","range" ,"medianq1q3","meansd"),
+                               cat.stats=c("N","countpct","Nmiss"),
+                               stats.labels=list(N='Available data', meansd="Mean(sd)", medianq1q3='Median(IQR)',Nmiss="Missing", range="min-max"))
+tab2 <- tableby(Sex ~ migratdata + migraAnn  + residence + OMG + IMG +ENT+BTH+DTH +EXT, data=Basee, control=mycontrols
+    )
+summary(tab2,title='Statistiques descriptives bivariées',digits = 2,
+        digits.pct = 2,term.name="Variables",pfootnote=TRUE)
+
+```
+
+
+
+## statistiques bivariée
+
+```{r message=FALSE,warning=FALSE,echo=FALSE,results='asis'}
+
+mycontrols  <- tableby.control(test=TRUE, total=TRUE,text = TRUE,
+                               numeric.test="kwt", cat.test="chisq",
+                               numeric.stats=c("N","Nmiss","range" ,"medianq1q3","meansd"),
+                               cat.stats=c("N","countpct","Nmiss"),
+                               stats.labels=list(N='Available data', meansd="Mean(sd)", medianq1q3='Median(IQR)',Nmiss="Missing", range="min-max"))
+tab2 <- tableby(residence ~ migratdata + migraAnn  + Sex + OMG + IMG +ENT+BTH+DTH+EXT , data=Basee, control=mycontrols
+    )
+summary(tab2,title='Statistiques descriptives bivariées',digits = 2,
+        digits.pct = 2,term.name="Variables",pfootnote=TRUE)
+
+```
+
+
