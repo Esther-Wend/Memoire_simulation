@@ -1,2 +1,2 @@
-# Memoire_simulation
-Code R pour la simulation de la vaccination
+# Memoire Master Biostatistique
+Code R pour l'analyse de survie sur plusieurs évènements
