@@ -1,5 +1,5 @@
 ---
-title: "MSPSTAGE"
+title: "Master Biostatistique STAGE"
 author: "Christelle"
 date: '2022-06-26'
 output:
